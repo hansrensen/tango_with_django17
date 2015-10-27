@@ -1,0 +1,20 @@
+{% extends 'rango/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}
+        <title>Rango</title>
+        <link rel="stylesheet" href="{% static "css/base.css" %}" /> <!-- CSS -->
+        <script src="{% static "js/jquery.js" %}"></script> <!-- JavaScript -->		
+		
+{% endblock %}
+
+{% block body_block %}
+     <div class="page-header">
+ 
+        <h1>Rango and Hans say...</h1>
+        hey there this is the about page <strong>{{ boldmessage }}</strong><br />
+        <p> Visits: {{ visits }}</p><br />
+		<img src="{% static "images/Hans.jpg" %}" alt="Picture of Hans" />
+
+{% endblock %}
