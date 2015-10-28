@@ -86,7 +86,7 @@ def category(request, category_name_slug):
 
         # Retrieve all of the associated pages.
         # Note that filter returns >= 1 model instance.
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
 
         # Adds our results list to the template context under name pages.
         context_dict['pages'] = pages
@@ -100,6 +100,7 @@ def category(request, category_name_slug):
         pass
 
     result_list = []
+    query = False
 
     if request.method == 'POST':
         query = request.POST['query'].strip()
@@ -108,7 +109,13 @@ def category(request, category_name_slug):
             # Run our Bing function to get the results list!
             result_list = run_query(query)
 
-            context_dict['result_list'] = result_list
+    context_dict['result_list'] = result_list
+
+    if not query:
+        context_dict['query'] = category.name
+    else:
+        context_dict['query'] = query
+
 
     # Go render the response and return it to the client.
     return render(request, 'rango/category.html', context_dict)
@@ -317,42 +324,54 @@ def track_url(request):
 def register_profile(request):
 
    # If it's a HTTP POST, we're interested in processing form data.
+    print 320
     if request.method == 'POST':
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         profile_form = UserProfileForm(data=request.POST)
-
+        print 324
+        print profile_form
         if profile_form.is_valid():
             # Save the user's form data to the database.
             profile = profile_form.save(commit=False)
+            print 330
+            print profile.user
             profile.user = user
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
-           if 'picture' in request.FILES:
-               profile.picture = request.FILES['picture']
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
 
             # Now we save the UserProfile model instance.
-           profile.save()
+            profile.save()
 
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.
-       else:
-           print profile_form.errors
+        else:
+            print profile_form.errors
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
     else:
         profile_form = UserProfileForm()
 
+    print 349
     # Render the template depending on the context.
-    return render(request,
-            'rango/register_profile.html', {'profile_form': profile_form )
+    return render(request,'rango/register_profile.html', {'profile_form': profile_form })
 
-    if request.method == 'POST':
-        print 321
-        
-    return render(request, 'rango/register_profile.html', {})
+@login_required
+def profile(request):
+#    return HttpResponse("Since you're logged in, you can see this text!")
+    # Construct a dictionary to pass to the template engine as its context.
+    # Note the key boldmessage is the same as {{ boldmessage }} in the template!
+    context_dict = {'profilemessage': "This is a profile page!!"}
+
+    # Return a rendered response to send to the client.
+    # We make use of the shortcut function to make our lives easier.
+    # Note that the first parameter is the template we wish to use.
+
+    return render(request, 'rango/profile.html', context_dict)
 

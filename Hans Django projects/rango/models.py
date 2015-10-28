@@ -1,6 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.contrib.auth.models import User, UserProfile
+from django.contrib.auth.models import User
 import datetime
 
 # Create your models here.
