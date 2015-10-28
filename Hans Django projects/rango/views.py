@@ -313,3 +313,46 @@ def track_url(request):
             return HttpResponseRedirect(page.url)
 
     return HttpResponseRedirect('/rango/')
+
+def register_profile(request):
+
+   # If it's a HTTP POST, we're interested in processing form data.
+    if request.method == 'POST':
+        # Attempt to grab information from the raw form information.
+        # Note that we make use of both UserForm and UserProfileForm.
+        profile_form = UserProfileForm(data=request.POST)
+
+        if profile_form.is_valid():
+            # Save the user's form data to the database.
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            # Did the user provide a profile picture?
+            # If so, we need to get it from the input form and put it in the UserProfile model.
+           if 'picture' in request.FILES:
+               profile.picture = request.FILES['picture']
+
+            # Now we save the UserProfile model instance.
+           profile.save()
+
+
+        # Invalid form or forms - mistakes or something else?
+        # Print problems to the terminal.
+        # They'll also be shown to the user.
+       else:
+           print profile_form.errors
+
+    # Not a HTTP POST, so we render our form using two ModelForm instances.
+    # These forms will be blank, ready for user input.
+    else:
+        profile_form = UserProfileForm()
+
+    # Render the template depending on the context.
+    return render(request,
+            'rango/register_profile.html', {'profile_form': profile_form )
+
+    if request.method == 'POST':
+        print 321
+        
+    return render(request, 'rango/register_profile.html', {})
+
