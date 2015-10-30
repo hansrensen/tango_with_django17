@@ -1,0 +1,42 @@
+{% extends "rango/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}Profile registration{% endblock %}
+
+{% block body_block %}
+        <h1>profile registration</h1>
+<!--
+        <form id="page_form" method="post" >
+        <form id="page_form" method="post" action="/rango/category/% cat.name %/add_page/">
+-->
+        <form role="form"  id="profile_form" method="post">
+            {% csrf_token %}
+ 
+<h2 class="form-signin-heading">Add Profile</h2>
+
+<div class="form-group">
+    <p class="optional"><label for="website">Website:</label>
+ <input class="form-control" id="id_website" name="website" type="website" placeholder="Website" /></p>
+</div>
+ 
+    <div class="input-group">
+        <span class="input-group-btn">
+            <span class=" btn btn-info btn-file">Profile image<input type="file" name="picture" id="picture">
+            </span>
+         </span>
+         <input type="text" id="picture" class="form-control small" readonly />
+
+    </div>
+
+
+</div>
+
+<!--
+        <button type="submit" class="btn btn-default">Add Profile</button>
+-->
+             <button class="btn btn-primary" type="submit" name="submit">Add Profile</button>
+
+        </form>
+
+{% endblock %}
