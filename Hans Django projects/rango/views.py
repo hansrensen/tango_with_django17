@@ -316,6 +316,7 @@ def track_url(request):
             page_id = request.GET['page_id']
             page = Page.objects.get(id=page_id)
             page.views=page.views+1
+            page.last_visit = datetime.today()
             page.save()
             return HttpResponseRedirect(page.url)
 

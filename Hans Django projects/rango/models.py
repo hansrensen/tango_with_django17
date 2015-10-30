@@ -37,6 +37,8 @@ class Page(models.Model):
     title = models.CharField(max_length=128)
     url = models.URLField()
     views = models.IntegerField(default=0)
+    last_visit = models.DateTimeField(default=datetime.date.today())
+    first_visit = models.DateTimeField(default=datetime.date.today())
 
     def __unicode__(self):      #For Python 2, use __str__ on Python 3
         return self.title
